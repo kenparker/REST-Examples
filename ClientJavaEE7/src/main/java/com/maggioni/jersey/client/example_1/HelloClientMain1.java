@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
  */
 public class HelloClientMain1 {
 
-    private static final String BASE_URI = "http://localhost:8080/REST-MyFirstRest/resources";
+    private static final String BASE_URI = "http://localhost:8080/HelloWorldVogella/resources";
     /**
      * @param args the command line arguments
      */

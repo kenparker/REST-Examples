@@ -20,7 +20,7 @@ import javax.ws.rs.client.WebTarget;
 public class HelloClient {
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/REST-MyFirstRest/resources";
+    private static final String BASE_URI = "http://localhost:8080/HelloWorldVogella/resources";
 
     public HelloClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();

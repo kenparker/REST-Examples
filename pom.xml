@@ -14,8 +14,7 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
   <modules>
-    <module>REST-Example-1</module>
-    <module>../REST-JerseyClient</module>
-    <module>../REST-MyFirstRest</module>
+    <module>HelloWorldVogella</module>
+    <module>ClientJavaEE7</module>
   </modules>
 </project>

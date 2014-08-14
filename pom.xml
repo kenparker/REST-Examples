@@ -17,5 +17,6 @@
     <module>HelloWorldVogella</module>
     <module>ClientJavaEE7</module>
     <module>restAiracks</module>
+    <module>TradingBaseComponents</module>
   </modules>
 </project>

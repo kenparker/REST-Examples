@@ -32,12 +32,12 @@ public class Stocks
                     // in case not found create a new Stock
                     em.persist(st);
                     return st;
+             
                 case "TOO_MANY_STOCKS_FOUND":
                     throw ex;
             }
         }
-
-        return new Stock();
+        return null;
     }
 
     public Stock findByName(String symbol) throws StockException

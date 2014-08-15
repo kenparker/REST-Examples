@@ -17,8 +17,8 @@ import org.junit.Test;
  */
 public class StocksTest
 {
-    private Context ctx;
-    private EJBContainer ejbcontainer;
+    private static Context ctx;
+    private static EJBContainer ejbcontainer;
     
     
     public StocksTest()
@@ -28,7 +28,9 @@ public class StocksTest
     @BeforeClass
     public static void setUpClass()
     {
-        
+        ejbcontainer = EJBContainer.createEJBContainer();
+        System.out.println("----->>  Opening container");
+        ctx = ejbcontainer.getContext();
         
     }
     
@@ -40,17 +42,10 @@ public class StocksTest
     @Before
     public void setUp()
     {
-        ejbcontainer = EJBContainer.createEJBContainer();
-        System.out.println("----->>  Opening container");
-        ctx = ejbcontainer.getContext();
+        ejbcontainer.close();
+        System.out.println("close EJB Container  <<---------");
     }
     
-    @After
-    public void tearDown()
-    {
-        ejbcontainer.close();
-        System.out.println("close EJB Container");
-    }
 
     /**
      * Test of createStock method, of class Stocks.
@@ -62,9 +57,9 @@ public class StocksTest
         Stock st = new Stock("SPY","SP 500");
         
         Stocks instance = (Stocks)ctx.lookup("java:global/classes/Stocks");
-        Stock expResult = null;
+        
         Stock result = instance.createStock(st);
-        assertEquals(expResult.getSymbol(), result.getSymbol());
+        assertEquals(st.getSymbol(), result.getSymbol());
         
     }
 
@@ -83,5 +78,11 @@ public class StocksTest
         assertEquals(expResult, result);
         
         }
+    
+    @After
+    public void tearDown()
+    {
+        
+    }
     
 }

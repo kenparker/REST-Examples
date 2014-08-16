@@ -1,88 +1,261 @@
-
 package com.maggioni.Boundary;
 
+
+import com.maggioni.Control.StockException;
 import com.maggioni.Entities.Stock;
-import javax.ejb.embeddable.EJBContainer;
-import javax.naming.Context;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-/**
- *
- * @author angelomaggioni
- */
 public class StocksTest
 {
-    private static Context ctx;
-    private static EJBContainer ejbcontainer;
-    
-    
+
+    Stocks stocks;
+    EntityManager em;
+
     public StocksTest()
     {
     }
-    
+
     @BeforeClass
     public static void setUpClass()
     {
-        ejbcontainer = EJBContainer.createEJBContainer();
-        System.out.println("----->>  Opening container");
-        ctx = ejbcontainer.getContext();
-        
+
     }
-    
+
     @AfterClass
     public static void tearDownClass()
     {
     }
-    
+
     @Before
     public void setUp()
     {
-        ejbcontainer.close();
-        System.out.println("close EJB Container  <<---------");
-    }
-    
-
-    /**
-     * Test of createStock method, of class Stocks.
-     */
-    @Test
-    public void testCreateStock() throws Exception
-    {
-        System.out.println("createStock");
-        Stock st = new Stock("SPY","SP 500");
-        
-        Stocks instance = (Stocks)ctx.lookup("java:global/classes/Stocks");
-        
-        Stock result = instance.createStock(st);
-        assertEquals(st.getSymbol(), result.getSymbol());
-        
+        stocks = new Stocks();
+        em = mock(EntityManager.class);
+        stocks.setEm(em);
     }
 
     /**
      * Test of findByName method, of class Stocks.
      */
     @Test
-    public void testFindByName() throws Exception
+    public void testFindByNameFound() throws Exception
     {
-        System.out.println("findByName");
+
         String symbol = "SPY";
-        
-        Stocks instance = (Stocks)ctx.lookup("java:global/classes/Stocks");
-        Stock expResult = null;
-        Stock result = instance.findByName(symbol);
-        assertEquals(expResult, result);
-        
+
+        List<Stock> list = new ArrayList();
+        list.add(new Stock("SPY", "SPPPPP"));
+
+        // Mock the Query
+        TypedQuery<Stock> query = mock(TypedQuery.class);
+        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
+        when(query.setParameter("sy", symbol)).thenReturn(query);
+        when(query.getResultList()).thenReturn(list);
+
+        // Let's call the function now
+        Stock result = stocks.findByName(symbol);
+
+        // check whether the query was called
+        verify(em).createNamedQuery("Stock.findBySymbol", Stock.class);
+        verify(query).setParameter("sy", symbol);
+        verify(query).getResultList();
+
+        // verify the results
+        assertEquals(list.get(0), result);
+
+    }
+
+    @Test
+    public void testFindByNameNotFound() throws Exception
+    {
+
+        String symbol = "SPYsss";
+
+        List<Stock> list = new ArrayList();
+
+        // Mock the Query
+        TypedQuery<Stock> query = mock(TypedQuery.class);
+        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
+        when(query.setParameter("sy", symbol)).thenReturn(query);
+        when(query.getResultList()).thenReturn(list);
+
+        // Let's call the function now
+        String errorCode = null;
+        try {
+            Stock result = stocks.findByName(symbol);
+        } catch (StockException se) {
+            errorCode = se.getErrorCode();
         }
+
+        // check whether the query was called
+        verify(em).createNamedQuery("Stock.findBySymbol", Stock.class);
+        verify(query).setParameter("sy", symbol);
+        verify(query).getResultList();
+
+        // verify the results
+        assertEquals(errorCode, "STOCK_NOT_FOUND");
+
+    }
+
+    @Test
+    public void testFindByNameTooManyFound() throws Exception
+    {
+
+        String symbol = "SPY";
+
+        List<Stock> list = new ArrayList();
+        list.add(new Stock("SPY", "cccc"));
+        list.add(new Stock("SPY", "ddd"));
+        list.add(new Stock("SPY", "dddd"));
+        // Mock the Query
+        TypedQuery<Stock> query = mock(TypedQuery.class);
+        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
+        when(query.setParameter("sy", symbol)).thenReturn(query);
+        when(query.getResultList()).thenReturn(list);
+
+        // Let's call the function now
+        String errorCode = null;
+        try {
+            Stock result = stocks.findByName(symbol);
+        } catch (StockException se) {
+            errorCode = se.getErrorCode();
+        }
+
+        // check whether the query was called
+        verify(em).createNamedQuery("Stock.findBySymbol", Stock.class);
+        verify(query).setParameter("sy", symbol);
+        verify(query).getResultList();
+
+        // verify the results
+        assertEquals(errorCode, "TOO_MANY_STOCKS_FOUND");
+
+    }
+
+    @Test
+    public void testcreateStockOK() throws Exception
+    {
+
+        String symbol = "SPY";
+
+        Stock st = new Stock("SPY", "ssssss");
+        List<Stock> list = new ArrayList();
+
+        // Mock the Query
+        TypedQuery<Stock> query = mock(TypedQuery.class);
+        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
+        when(query.setParameter("sy", symbol)).thenReturn(query);
+        when(query.getResultList()).thenReturn(list);
+
+        // Let's call the function now
+        String errorCode = null;
+        Stock result = null;
+        try {
+            result = stocks.createStock(st);
+        } catch (StockException se) {
+            errorCode = se.getErrorCode();
+        }
+
+        // check whether the query was called
+        verify(em).createNamedQuery("Stock.findBySymbol", Stock.class);
+        verify(query).setParameter("sy", symbol);
+        verify(query).getResultList();
+
+        // verify the results
+        assertEquals(st, result);
+
+    }
+
+    @Test
+    public void testcreateStockTooMany() throws Exception
+    {
+
+        String symbol = "SPY";
+
+        Stock st = new Stock("SPY", "ssssss");
+        List<Stock> list = new ArrayList();
+        list.add(new Stock("SPY", "cccc"));
+        list.add(new Stock("SPY", "ddd"));
+        list.add(new Stock("SPY", "dddd"));
+
+        // Mock the Query
+        TypedQuery<Stock> query = mock(TypedQuery.class);
+        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
+        when(query.setParameter("sy", symbol)).thenReturn(query);
+        when(query.getResultList()).thenReturn(list);
+
+        // Let's call the function now
+        String errorCode = null;
+        Stock result = null;
+        try {
+            result = stocks.createStock(st);
+        } catch (StockException se) {
+            errorCode = se.getErrorCode();
+        }
+
+        // check whether the query was called
+        verify(em).createNamedQuery("Stock.findBySymbol", Stock.class);
+        verify(query).setParameter("sy", symbol);
+        verify(query).getResultList();
+
+        // verify the results
+        assertEquals(errorCode, "TOO_MANY_STOCKS_FOUND");
+
+    }
+
     
+    
+    
+    @Test
+    public void testcreateStockNotOK() throws Exception
+    {
+
+        String symbol = "SPY";
+
+        Stock st = new Stock("SPY", "ssssss");
+        List<Stock> list = new ArrayList();
+        list.add(new Stock("SPY", "cccc"));
+        
+        // Mock the Query
+        TypedQuery<Stock> query = mock(TypedQuery.class);
+        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
+        when(query.setParameter("sy", symbol)).thenReturn(query);
+        when(query.getResultList()).thenReturn(list);
+
+        // Let's call the function now
+        String errorCode = null;
+        Stock result = null;
+        try {
+            result = stocks.createStock(st);
+        } catch (StockException se) {
+            errorCode = se.getErrorCode();
+        }
+
+        // check whether the query was called
+        verify(em).createNamedQuery("Stock.findBySymbol", Stock.class);
+        verify(query).setParameter("sy", symbol);
+        verify(query).getResultList();
+
+        // verify the results
+        assertEquals(errorCode, "STOCK_FOUND");
+
+    }
+
     @After
     public void tearDown()
     {
-        
+
     }
-    
+
 }

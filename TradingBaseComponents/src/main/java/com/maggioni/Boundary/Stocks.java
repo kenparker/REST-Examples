@@ -16,7 +16,14 @@ public class Stocks
 {
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
+
+    public void setEm(EntityManager em)
+    {
+        this.em = em;
+    }
+    
+    
 
     public Stock createStock(Stock st) throws StockException
     {
@@ -37,7 +44,7 @@ public class Stocks
                     throw ex;
             }
         }
-        return null;
+        throw new StockException("Stock :" + st.getSymbol() + " found", "STOCK_FOUND");
     }
 
     public Stock findByName(String symbol) throws StockException

@@ -2,6 +2,9 @@ package com.maggioni.Boundary;
 
 import com.maggioni.Control.StockException;
 import com.maggioni.Entities.Stock;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -10,6 +13,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
 /**
@@ -34,6 +38,7 @@ public class StocksREST
     }
     
     @POST
+    @Path("/standardPost")
     @Consumes({"application/xml", "application/json"})
     public void createStock(String symbol, String name) {
         
@@ -46,7 +51,17 @@ public class StocksREST
         {
             Logger.getLogger(StocksREST.class.getName()).log(Level.SEVERE, null, ex);
         }
+          
+    }
+    
+    @POST
+    @Path("/testPost")
+    @Consumes("application/x-www-form.urlencoded")
+    public void post(MultivaluedHashMap<String,String> formParameters) {
         
-         
+        
+        Set<Map.Entry<String, List<String>>> entrySet = formParameters.entrySet();
+        
+        
     }
 }

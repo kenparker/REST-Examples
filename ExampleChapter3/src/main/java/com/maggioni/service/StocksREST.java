@@ -4,6 +4,7 @@ import com.maggioni.Entities.Stock;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -12,7 +13,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.xml.parsers.DocumentBuilder;
@@ -28,12 +28,8 @@ import org.w3c.dom.NodeList;
 @Path("/stocks")
 public class StocksREST
 {
+    private static final String BASE_URI = "http://localhost:8080/ExampleChapter3/resources/";
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String sayPlainTextHello() {
-        return "Hello There";
-    }
     
     @POST
     @Consumes("application/xml")
@@ -42,11 +38,12 @@ public class StocksREST
         Stock stock = readStock(is);
 
         System.out.println("created stock. " + stock.getSymbol());
-        return Response.created(URI.create("/resources/stocks/" + stock.getSymbol())).build();
+        return Response.created(URI.create(BASE_URI+"stocks/" + stock.getSymbol())).build();
 
     }
 
     @GET
+    @Path("{symbol}")
     @Produces("application/xml")
     public StreamingOutput getStock(@PathParam("symbol") String symbol)
     {
@@ -90,6 +87,10 @@ public class StocksREST
                     }
                 }
             }
+            // for test purposes
+            System.out.println("symbol: "+stock.getSymbol());
+            System.out.println("name : "+stock.getName());
+            //
             return stock;
         } catch (Exception ex)
         {
@@ -101,12 +102,17 @@ public class StocksREST
     {
 
         Stock stock = new Stock();
+        stock.setSymbol("test");
+        stock.setName("test");
         return stock;
     }
 
     protected void outputStock(OutputStream os, Stock stock)
     {
-
+        PrintStream writer = new PrintStream(os);
+        writer.println("<stock symbol=\""+stock.getSymbol()+"\">");
+        writer.println(" <name>"+stock.getName()+"</name>");
+        writer.println("</stock>");
     }
 
 }

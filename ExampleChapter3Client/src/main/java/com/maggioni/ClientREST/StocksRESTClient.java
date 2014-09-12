@@ -5,7 +5,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import org.glassfish.jersey.internal.LocalizationMessages;
 
 /**
  * Jersey REST client generated for REST resource:StocksREST [/stocks]<br>
@@ -32,7 +31,7 @@ public class StocksRESTClient
         resource = client.target(BASE_URI).path("stocks");
     }
 
-    public void createStock() throws ClientErrorException
+    public String createStock() throws ClientErrorException
     {
         System.out.println("*** Create a new Stock *****");
         String xml = "<stock symbol=\"spy\">"
@@ -46,6 +45,16 @@ public class StocksRESTClient
 
         String location = response.getLocation().toString();
         System.out.println("location: " + location);
+        return location;
+    }
+    
+    public void getStock(String location)
+    {
+        System.out.println("*** GET Stock ***");
+        //final WebTarget path = client.target(BASE_URI+location);
+        //System.out.println(path.getUri().toString());
+        String stock = client.target(location).request().get(String.class);
+        System.out.println(stock);
     }
 
     public void close()

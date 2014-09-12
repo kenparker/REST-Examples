@@ -6,12 +6,14 @@ package com.maggioni.ClientREST;
  */
 public class StocksRESTClientCall
 {
-public static void main(String[] args)
+
+    public static void main(String[] args)
     {
         StocksRESTClient helloObj = new StocksRESTClient();
-        
-        helloObj.createStock();
+
+        String location = helloObj.createStock();
+        helloObj.getStock(location);
         helloObj.close();
 
-    }    
+    }
 }

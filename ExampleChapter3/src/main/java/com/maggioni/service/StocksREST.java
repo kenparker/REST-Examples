@@ -35,6 +35,7 @@ public class StocksREST
     @Consumes("application/xml")
     public Response createStock(InputStream is)
     {
+        System.out.println("------  Start Create");
         Stock stock = readStock(is);
 
         System.out.println("created stock. " + stock.getSymbol());

@@ -18,5 +18,7 @@
     <module>ClientJavaEE7</module>
     <module>restAiracks</module>
     <module>TradingBaseComponents</module>
+    <module>ExampleChapter3</module>
+    <module>ExampleChapter3Client</module>
   </modules>
 </project>

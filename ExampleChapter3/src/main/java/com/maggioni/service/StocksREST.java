@@ -9,6 +9,7 @@ import java.net.URI;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -64,7 +65,21 @@ public class StocksREST
             }
         };
     }
-
+    
+    @PUT
+    @Path("{symbol}")
+    @Consumes("application/xml")
+    public void updateStock(@PathParam("symbol") String symbol, InputStream is) {
+        Stock updateStock = readStock(is);
+        Stock stock = findStock(symbol);
+        if (stock == null)
+        {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        
+        stock.setName(updateStock.getName());
+    }
+    
     protected Stock readStock(InputStream is)
     {
         try

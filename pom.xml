@@ -20,5 +20,7 @@
     <module>TradingBaseComponents</module>
     <module>ExampleChapter3</module>
     <module>ExampleChapter3Client</module>
+    <module>JAX-RS20_Example</module>
+    <module>ExampleTestRest</module>
   </modules>
 </project>

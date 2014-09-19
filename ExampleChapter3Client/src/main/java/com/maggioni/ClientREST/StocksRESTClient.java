@@ -48,6 +48,23 @@ public class StocksRESTClient
         return location;
     }
     
+    
+    public String updateStock(String location) throws ClientErrorException
+    {
+        System.out.println("*** Update a new Stock *****");
+        String xml = "<stock symbol=\"spy\">"
+                + "<name>" + "SP 500" + "</name>"
+                + "</stock>";
+        Response response = client.target(location).request().put(Entity.xml(xml));
+        if (response.getStatus() != 204)
+        {
+            throw new RuntimeException("Failed to update");
+        }
+
+        
+        return location;
+    }
+    
     public void getStock(String location)
     {
         System.out.println("*** GET Stock ***");

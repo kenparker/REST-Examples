@@ -13,6 +13,7 @@ public class StocksRESTClientCall
 
         String location = helloObj.createStock();
         helloObj.getStock(location);
+        helloObj.updateStock(location);
         helloObj.close();
 
     }

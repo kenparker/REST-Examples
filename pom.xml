@@ -17,10 +17,11 @@
     <module>HelloWorldVogella</module>
     <module>ClientJavaEE7</module>
     <module>restAiracks</module>
-    <module>TradingBaseComponents</module>
     <module>ExampleChapter3</module>
     <module>ExampleChapter3Client</module>
     <module>JAX-RS20_Example</module>
     <module>ExampleTestRest</module>
+    <module>TradingCoreComponents</module>
+    <module>TradingCore</module>
   </modules>
 </project>

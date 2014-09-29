@@ -68,22 +68,7 @@ public class StocksRESTTest
     {
         System.out.println("getStock");
         
-        StreamingOutput result = new StreamingOutput()
-        {
-
-            @Override
-            public void write(OutputStream output) throws IOException, WebApplicationException
-            {
-                stocksREST.outputStock(output, stock);
-            }
-        };
         
-        StreamingOutput so = stocksREST.getStock("SPY");
-        if (so.equals(result))
-        {
-            System.out.println("equal");
-        }
-      //  assertTrue(so.equals(result));
        
        
     }

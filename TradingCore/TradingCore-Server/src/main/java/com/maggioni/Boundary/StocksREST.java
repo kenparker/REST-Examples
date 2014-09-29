@@ -5,6 +5,7 @@ import com.maggioni.Entities.Stock;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +21,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 /**
@@ -28,72 +30,52 @@ import javax.ws.rs.core.StreamingOutput;
  */
 @Stateless
 @Path("stocks")
-public class StocksREST {
+public class StocksREST
+{
 
     @Inject
     Stocks st;
     @Inject
     Stock stock;
 
-    public StocksREST() {
+    public StocksREST()
+    {
     }
 
-    public StocksREST(Stocks st) {
+    public StocksREST(Stocks st)
+    {
         this.st = st;
     }
 
     @GET
     @Path("{symbol}")
     @Produces("application/xml")
-    public StreamingOutput getStock(@PathParam("symbol") String symbol) {
-
+    public Response getStock(@PathParam("symbol") String symbol)
+    {
         Stock stock;
         try {
             stock = st.findBySymbol(symbol);
-            return new StreamingOutput() {
-                @Override
-                public void write(OutputStream outputStream) throws IOException, WebApplicationException {
-                    outputStock(outputStream, stock);
-                }
-            };
 
         } catch (StockException ex) {
             throw new RuntimeException(ex.getErrorCode());
         }
 
+        return Response.ok().build();
     }
 
     @POST
-    @Path("/standardPost")
-    @Consumes(
-            {
-                "application/xml", "application/json"
-            })
-    public void createStock(String symbol, String name) {
+    @Consumes("application/xml")
+    public Response createStock(String symbol, String name)
+    {
 
         stock.setSymbol(symbol);
         stock.setName(name);
         try {
             st.createStock(stock);
         } catch (StockException ex) {
-            Logger.getLogger(StocksREST.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex.getErrorCode());
         }
 
-    }
-
-    @POST
-    @Path("/testPost")
-    @Consumes("application/x-www-form.urlencoded")
-    public void post(MultivaluedHashMap<String, String> formParameters) {
-
-        Set<Map.Entry<String, List<String>>> entrySet = formParameters.entrySet();
-
-    }
-
-    public void outputStock(OutputStream os, Stock stock) {
-        PrintStream writer = new PrintStream(os);
-        writer.println("<stock symbol=\"" + stock.getSymbol() + "\">");
-        writer.println(" <name>" + stock.getName() + "</name>");
-        writer.println("</stock>");
+        return Response.created(URI.create(symbol)).build();
     }
 }

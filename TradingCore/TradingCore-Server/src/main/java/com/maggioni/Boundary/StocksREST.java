@@ -3,6 +3,7 @@ package com.maggioni.Boundary;
 import com.maggioni.Control.StockException;
 import com.maggioni.Entities.Stock;
 
+
 import java.net.URI;
 import javax.ejb.Stateless;
 import javax.inject.Inject;

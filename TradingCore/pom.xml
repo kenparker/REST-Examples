@@ -11,5 +11,6 @@
   <modules>
     <module>TradingCore-Server</module>
     <module>TradingCore-Client</module>
+    <module>TradingCore-Entities</module>
   </modules>
 </project>

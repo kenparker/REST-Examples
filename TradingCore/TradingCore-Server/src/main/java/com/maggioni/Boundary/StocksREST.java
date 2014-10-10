@@ -49,7 +49,7 @@ public class StocksREST
             throw new RuntimeException(ex.getErrorCode());
         }
 
-        return Response.ok().build();
+        return Response.ok(stock).build();
     }
 
     @POST

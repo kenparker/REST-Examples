@@ -37,7 +37,7 @@ public class StocksRESTClient {
         Stock st = new Stock("QQQ", "Nasdaq");
         Response response = resource.request()
                 .post(Entity.entity(st, MediaType.APPLICATION_XML));
-       
+
         Assert.assertEquals(Status.fromStatusCode(response.getStatus()), Status.INTERNAL_SERVER_ERROR);
     }
 
@@ -48,29 +48,44 @@ public class StocksRESTClient {
         Stock st = new Stock("QQQ3", "Nasdaq");
         Response response = resource.request()
                 .post(Entity.entity(st, MediaType.APPLICATION_XML));
-        
+
         if (Status.fromStatusCode(response.getStatus()) == Status.CREATED) {
             String location = response.getLocation().toString();
             System.out.println("location: " + location);
         }
-        Assert.assertEquals(Status.CREATED,Status.fromStatusCode(response.getStatus()));
+        Assert.assertEquals(Status.CREATED, Status.fromStatusCode(response.getStatus()));
     }
 
     @Test
     public void get_stock_found() {
         System.out.println("*** get Stock - stock found ****");
-        
+
         String symbol = "SPY";
-        
+
         Builder request = resource.path("/{symbol}")
                 .resolveTemplate("symbol", symbol)
-                .request();      
+                .request();
         Response response = request.get();
-        
-        Assert.assertEquals(Status.OK,Status.fromStatusCode(response.getStatus()));
+
+        Assert.assertEquals(Status.OK, Status.fromStatusCode(response.getStatus()));
         Stock stock = request.get(Stock.class);
-        Assert.assertEquals(symbol,stock.getSymbol());
-        
+        Assert.assertEquals(symbol, stock.getSymbol());
+
+    }
+
+    @Test
+    public void get_stock_notfound() {
+        System.out.println("*** get Stock - stock not found ****");
+
+        String symbol = "SPYAAA";
+
+        Builder request = resource.path("/{symbol}")
+                .resolveTemplate("symbol", symbol)
+                .request();
+        Response response = request.get();
+        Assert.assertEquals(Status.INTERNAL_SERVER_ERROR, Status.fromStatusCode(response.getStatus()));
+        Assert.assertEquals("STOCK_NOT_FOUND",response.getHeaderString("x-reason"));
+
     }
     /*
      public void getStock(String location)
@@ -82,6 +97,7 @@ public class StocksRESTClient {
      System.out.println(stock);
      }
      */
+
     @After
     public void close() {
         client.close();

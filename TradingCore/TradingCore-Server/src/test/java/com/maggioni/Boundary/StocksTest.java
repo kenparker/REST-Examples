@@ -1,6 +1,5 @@
 package com.maggioni.Boundary;
 
-
 import com.maggioni.Control.StockException;
 import com.maggioni.Entities.Stock;
 import java.util.ArrayList;
@@ -17,53 +16,53 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class StocksTest
-{
+public class StocksTest {
 
     Stocks stocks;
     EntityManager em;
+    
+    List<Stock> list;
+    String symbol;
+    TypedQuery<Stock> query;
 
-    public StocksTest()
-    {
+    public StocksTest() {
     }
 
     @BeforeClass
-    public static void setUpClass()
-    {
+    public static void setUpClass() {
 
     }
 
     @AfterClass
-    public static void tearDownClass()
-    {
+    public static void tearDownClass() {
     }
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
+       
         stocks = new Stocks();
+        list = new ArrayList();
+        symbol = "SPY";
+        
         em = mock(EntityManager.class);
         stocks.setEm(em);
+        
+        // Mock the Query
+        query = mock(TypedQuery.class);
+        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
+        when(query.setParameter("sy", symbol)).thenReturn(query);
+        when(query.getResultList()).thenReturn(list);
     }
 
     /**
      * Test of findBySymbol method, of class Stocks.
      */
     @Test
-    public void testFindByNameFound() throws Exception
-    {
+    public void testFindByNameFound() throws Exception {
 
-        String symbol = "SPY";
-
-        List<Stock> list = new ArrayList();
+        symbol = "SPY";      
         list.add(new Stock("SPY", "SPPPPP"));
-
-        // Mock the Query
-        TypedQuery<Stock> query = mock(TypedQuery.class);
-        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
-        when(query.setParameter("sy", symbol)).thenReturn(query);
-        when(query.getResultList()).thenReturn(list);
-
+  
         // Let's call the function now
         Stock result = stocks.findBySymbol(symbol);
 
@@ -78,18 +77,9 @@ public class StocksTest
     }
 
     @Test
-    public void testFindByNameNotFound() throws Exception
-    {
+    public void testFindByNameNotFound() throws Exception {
 
-        String symbol = "SPYsss";
-
-        List<Stock> list = new ArrayList();
-
-        // Mock the Query
-        TypedQuery<Stock> query = mock(TypedQuery.class);
-        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
-        when(query.setParameter("sy", symbol)).thenReturn(query);
-        when(query.getResultList()).thenReturn(list);
+        symbol = "SPYsss";
 
         // Let's call the function now
         String errorCode = null;
@@ -110,20 +100,13 @@ public class StocksTest
     }
 
     @Test
-    public void testFindByNameTooManyFound() throws Exception
-    {
+    public void testFindByNameTooManyFound() throws Exception {
 
-        String symbol = "SPY";
+        symbol = "SPY";
 
-        List<Stock> list = new ArrayList();
         list.add(new Stock("SPY", "cccc"));
         list.add(new Stock("SPY", "ddd"));
         list.add(new Stock("SPY", "dddd"));
-        // Mock the Query
-        TypedQuery<Stock> query = mock(TypedQuery.class);
-        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
-        when(query.setParameter("sy", symbol)).thenReturn(query);
-        when(query.getResultList()).thenReturn(list);
 
         // Let's call the function now
         String errorCode = null;
@@ -144,20 +127,11 @@ public class StocksTest
     }
 
     @Test
-    public void testcreateStockOK() throws Exception
-    {
+    public void testcreateStockOK() throws Exception {
 
-        String symbol = "SPY";
-
+        symbol = "SPY";
         Stock st = new Stock("SPY", "ssssss");
-        List<Stock> list = new ArrayList();
-
-        // Mock the Query
-        TypedQuery<Stock> query = mock(TypedQuery.class);
-        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
-        when(query.setParameter("sy", symbol)).thenReturn(query);
-        when(query.getResultList()).thenReturn(list);
-
+         
         // Let's call the function now
         String errorCode = null;
         Stock result = null;
@@ -178,22 +152,14 @@ public class StocksTest
     }
 
     @Test
-    public void testcreateStockTooMany() throws Exception
-    {
+    public void testcreateStockTooMany() throws Exception {
 
-        String symbol = "SPY";
-
+        symbol = "SPY";
         Stock st = new Stock("SPY", "ssssss");
-        List<Stock> list = new ArrayList();
+
         list.add(new Stock("SPY", "cccc"));
         list.add(new Stock("SPY", "ddd"));
         list.add(new Stock("SPY", "dddd"));
-
-        // Mock the Query
-        TypedQuery<Stock> query = mock(TypedQuery.class);
-        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
-        when(query.setParameter("sy", symbol)).thenReturn(query);
-        when(query.getResultList()).thenReturn(list);
 
         // Let's call the function now
         String errorCode = null;
@@ -214,24 +180,12 @@ public class StocksTest
 
     }
 
-    
-    
-    
     @Test
-    public void testcreateStockNotOK() throws Exception
-    {
+    public void testcreateStockNotOK() throws Exception {
 
-        String symbol = "SPY";
-
+        symbol = "SPY";
         Stock st = new Stock("SPY", "ssssss");
-        List<Stock> list = new ArrayList();
         list.add(new Stock("SPY", "cccc"));
-        
-        // Mock the Query
-        TypedQuery<Stock> query = mock(TypedQuery.class);
-        when(em.createNamedQuery("Stock.findBySymbol", Stock.class)).thenReturn(query);
-        when(query.setParameter("sy", symbol)).thenReturn(query);
-        when(query.getResultList()).thenReturn(list);
 
         // Let's call the function now
         String errorCode = null;
@@ -253,8 +207,7 @@ public class StocksTest
     }
 
     @After
-    public void tearDown()
-    {
+    public void tearDown() {
 
     }
 

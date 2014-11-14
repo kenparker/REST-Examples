@@ -3,17 +3,17 @@ package com.maggioni.router;
 import com.maggioni.exception.EmpNotFoundException;
 import com.maggioni.model.EmpRequest;
 import com.maggioni.model.EmpResponse;
-import javax.enterprise.inject.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBElement;
 
 /**
  *
- * @author magang
+ * http://www.javacodegeeks.com/2012/10/rest-using-jersey-complete-tutorial-with-jaxb-exception-handling-and-client-program.html
  */
 @Path("/emp")
 public class EmpRouter {

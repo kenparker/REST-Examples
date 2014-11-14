@@ -2,7 +2,7 @@ package com.maggioni.exception;
 
 /**
  *
- * @author magang
+ * http://www.javacodegeeks.com/2012/10/rest-using-jersey-complete-tutorial-with-jaxb-exception-handling-and-client-program.html
  */
 public class EmpNotFoundException extends Exception {
 

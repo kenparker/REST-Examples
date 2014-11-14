@@ -21,7 +21,7 @@
     <module>ExampleChapter3Client</module>
     <module>JAX-RS20_Example</module>
     <module>ExampleTestRest</module>
-    <module>TradingCoreComponents</module>
     <module>TradingCore</module>
+    <module>REST_JAXB_Exc_Client_Tutorial</module>
   </modules>
 </project>

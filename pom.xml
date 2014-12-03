@@ -24,6 +24,5 @@
     <module>TradingCore</module>
     <module>REST_JAXB_Exc_Client_Tutorial</module>
     <module>JAXRSReturningListOfInstances</module>
-    <module>JAX-RS20_ReturningListOfInstances</module>
   </modules>
 </project>

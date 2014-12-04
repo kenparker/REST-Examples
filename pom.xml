@@ -24,5 +24,6 @@
     <module>TradingCore</module>
     <module>REST_JAXB_Exc_Client_Tutorial</module>
     <module>JAXRSReturningListOfInstances</module>
+    <module>JAXRS-hasCode-Tutorial</module>
   </modules>
 </project>

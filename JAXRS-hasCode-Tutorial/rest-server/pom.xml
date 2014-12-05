@@ -21,9 +21,9 @@
     
     <dependencies>
         <dependency>
-            <groupId>com.hascode.tutorial.rest</groupId>
+            <groupId>com.maggioni</groupId>
             <artifactId>entity</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0</version>
             <type>jar</type>
         </dependency>
         <dependency>

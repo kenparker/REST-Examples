@@ -22,8 +22,8 @@
     <module>JAX-RS20_Example</module>
     <module>ExampleTestRest</module>
     <module>TradingCore</module>
-    <module>REST_JAXB_Exc_Client_Tutorial</module>
     <module>JAXRSReturningListOfInstances</module>
-    <module>JAXRS-hasCode-Tutorial</module>
+    <module>REST_JAXB_ExceptionHandling_Client_Tutorial</module>
+    <module>JAX-RS20_NewClientFeatures_hasCode_Tutorial</module>
   </modules>
 </project>
